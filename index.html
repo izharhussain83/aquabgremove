@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BackgroundAI - Instant Image Background Removal</title>
+    <title>BackgroundAI - Background Remover & Image Enhancer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
@@ -25,6 +25,9 @@
         .bg-gradient-custom {
             background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -33,11 +36,12 @@
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center">
                 <i class="fas fa-magic text-2xl text-purple-600 mr-3"></i>
-                <h1 class="text-2xl font-bold text-gray-800">BackgroundAI</h1>
+                <h1 class="text-2xl font-bold text-gray-800">PixelPerfect AI</h1>
+
             </div>
             <div class="space-x-4">
-                <a href="#features" class="text-gray-700 hover:text-purple-600 transition">Features</a>
-                <a href="#how-it-works" class="text-gray-700 hover:text-purple-600 transition">How It Works</a>
+                <button onclick="showTool('background-remover')" class="text-gray-700 hover:text-purple-600 transition">Background Remover</button>
+                <button onclick="showTool('image-enhancer')" class="text-gray-700 hover:text-purple-600 transition">Image Enhancer</button>
                 <button class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition">
                     Get Started
                 </button>
@@ -45,78 +49,79 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="pt-24 pb-16 bg-gradient-custom text-white">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6 animate-fade-in">
-                Remove Backgrounds in Seconds
-            </h2>
-            <p class="text-xl mb-10 max-w-2xl mx-auto animate-fade-in">
-                Advanced AI-powered background removal that preserves image quality and works with any photo.
-            </p>
-        </div>
-    </header>
+    <!-- Background Remover Tool -->
+    <section id="background-remover" class="pt-24">
+        <header class="pb-16 bg-gradient-custom text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 animate-fade-in">
+                    Remove Backgrounds in Seconds
+                </h2>
+                <p class="text-xl mb-10 max-w-2xl mx-auto animate-fade-in">
+                    Advanced AI-powered background removal that preserves image quality and works with any photo.
+                </p>
+            </div>
+        </header>
 
-    <!-- Background Removal Tool -->
-    <section class="container mx-auto px-4 -mt-16 mb-16">
-        <div class="bg-white rounded-xl shadow-2xl p-8 max-w-4xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="space-y-6">
-                    <div class="border-2 border-dashed border-purple-300 p-6 text-center rounded-lg">
-                        <input 
-                            type="file" 
-                            id="imageUpload" 
-                            accept="image/*" 
-                            class="hidden"
-                            onchange="previewImage(event)"
-                        >
-                        <label 
-                            for="imageUpload" 
-                            class="cursor-pointer flex flex-col items-center justify-center space-y-4"
-                        >
-                            <i class="fas fa-cloud-upload-alt text-6xl text-purple-500 animate-pulse"></i>
-                            <span class="text-gray-600 text-lg">Drag & Drop or Click to Upload</span>
-                        </label>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <button 
-                            onclick="removeBackground()" 
-                            class="bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition flex items-center justify-center"
-                        >
-                            <i class="fas fa-magic mr-2"></i> Remove Background
-                        </button>
-                        <button 
-                            onclick="downloadImage()" 
-                            class="bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition flex items-center justify-center"
-                        >
-                            <i class="fas fa-download mr-2"></i> Download
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="grid grid-rows-2 gap-4">
-                    <div class="bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center relative">
-                        <img 
-                            id="originalImage" 
-                            src="" 
-                            alt="Original Image" 
-                            class="max-w-full max-h-full object-contain hidden"
-                        >
-                        <span id="noImageText" class="text-gray-400">Original Image</span>
-                        <div id="originalImageLoader" class="absolute inset-0 bg-white bg-opacity-70 hidden flex items-center justify-center">
-                            <i class="fas fa-spinner fa-spin text-4xl text-purple-600"></i>
+        <div class="container mx-auto px-4 -mt-16 mb-16">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div class="border-2 border-dashed border-purple-300 p-6 text-center rounded-lg">
+                            <input 
+                                type="file" 
+                                id="backgroundUpload" 
+                                accept="image/*" 
+                                class="hidden"
+                                onchange="previewImage(event, 'background')"
+                            >
+                            <label 
+                                for="backgroundUpload" 
+                                class="cursor-pointer flex flex-col items-center justify-center space-y-4"
+                            >
+                                <i class="fas fa-cloud-upload-alt text-6xl text-purple-500 animate-pulse"></i>
+                                <span class="text-gray-600 text-lg">Drag & Drop or Click to Upload</span>
+                            </label>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button 
+                                onclick="removeBackground()" 
+                                class="bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition flex items-center justify-center"
+                            >
+                                <i class="fas fa-magic mr-2"></i> Remove Background
+                            </button>
+                            <button 
+                                onclick="downloadImage('background')" 
+                                class="bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition flex items-center justify-center"
+                            >
+                                <i class="fas fa-download mr-2"></i> Download
+                            </button>
                         </div>
                     </div>
-                    <div class="bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center relative">
-                        <img 
-                            id="processedImage" 
-                            src="" 
-                            alt="Processed Image" 
-                            class="max-w-full max-h-full object-contain hidden"
-                        >
-                        <span id="noProcessedText" class="text-gray-400">Processed Image</span>
-                        <div id="processedImageLoader" class="absolute inset-0 bg-white bg-opacity-70 hidden flex items-center justify-center">
-                            <i class="fas fa-spinner fa-spin text-4xl text-purple-600"></i>
+                    
+                    <div class="grid grid-rows-2 gap-4">
+                        <div class="bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center relative">
+                            <img 
+                                id="backgroundOriginalImage" 
+                                src="" 
+                                alt="Original Image" 
+                                class="max-w-full max-h-full object-contain hidden"
+                            >
+                            <span id="backgroundNoImageText" class="text-gray-400">Original Image</span>
+                            <div id="backgroundOriginalImageLoader" class="absolute inset-0 bg-white bg-opacity-70 hidden flex items-center justify-center">
+                                <i class="fas fa-spinner fa-spin text-4xl text-purple-600"></i>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center relative">
+                            <img 
+                                id="backgroundProcessedImage" 
+                                src="" 
+                                alt="Processed Image" 
+                                class="max-w-full max-h-full object-contain hidden"
+                            >
+                            <span id="backgroundNoProcessedText" class="text-gray-400">Processed Image</span>
+                            <div id="backgroundProcessedImageLoader" class="absolute inset-0 bg-white bg-opacity-70 hidden flex items-center justify-center">
+                                <i class="fas fa-spinner fa-spin text-4xl text-purple-600"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -124,39 +129,105 @@
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="bg-gray-100 py-16">
-        <div class="container mx-auto px-4 text-center">
-            <h3 class="text-3xl font-bold mb-12">Why Choose BackgroundAI</h3>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <i class="fas fa-bolt text-4xl text-purple-600 mb-4"></i>
-                    <h4 class="text-xl font-semibold mb-3">Super Fast</h4>
-                    <p>Remove backgrounds in just a few seconds with our powerful AI.</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <i class="fas fa-image text-4xl text-purple-600 mb-4"></i>
-                    <h4 class="text-xl font-semibold mb-3">High Quality</h4>
-                    <p>Preserve image details and edges with our advanced algorithms.</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <i class="fas fa-lock text-4xl text-purple-600 mb-4"></i>
-                    <h4 class="text-xl font-semibold mb-3">Secure</h4>
-                    <p>Your images are processed securely and never stored permanently.</p>
+    <!-- Image Enhancer Tool -->
+    <section id="image-enhancer" class="pt-24 hidden">
+        <header class="pb-16 bg-gradient-custom text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 animate-fade-in">
+                    Enhance Your Images
+                </h2>
+                <p class="text-xl mb-10 max-w-2xl mx-auto animate-fade-in">
+                    Improve the quality of your images with our advanced AI-powered image enhancer.
+                </p>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 -mt-16 mb-16">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div class="border-2 border-dashed border-purple-300 p-6 text-center rounded-lg">
+                            <input 
+                                type="file" 
+                                id="enhancerUpload" 
+                                accept="image/*" 
+                                class="hidden"
+                                onchange="previewImage(event, 'enhancer')"
+                            >
+                            <label 
+                                for="enhancerUpload" 
+                                class="cursor-pointer flex flex-col items-center justify-center space-y-4"
+                            >
+                                <i class="fas fa-cloud-upload-alt text-6xl text-purple-500 animate-pulse"></i>
+                                <span class="text-gray-600 text-lg">Drag & Drop or Click to Upload</span>
+                            </label>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button 
+                                onclick="enhanceImage()" 
+                                class="bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition flex items-center justify-center"
+                            >
+                                <i class="fas fa-magic mr-2"></i> Enhance Image
+                            </button>
+                            <button 
+                                onclick="downloadImage('enhancer')" 
+                                class="bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition flex items-center justify-center"
+                            >
+                                <i class="fas fa-download mr-2"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-rows-2 gap-4">
+                        <div class="bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center relative">
+                            <img 
+                                id="enhancerOriginalImage" 
+                                src="" 
+                                alt="Original Image" 
+                                class="max-w-full max-h-full object-contain hidden"
+                            >
+                            <span id="enhancerNoImageText" class="text-gray-400">Original Image</span>
+                            <div id="enhancerOriginalImageLoader" class="absolute inset-0 bg-white bg-opacity-70 hidden flex items-center justify-center">
+                                <i class="fas fa-spinner fa-spin text-4xl text-purple-600"></i>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center relative">
+                            <img 
+                                id="enhancerProcessedImage" 
+                                src="" 
+                                alt="Processed Image" 
+                                class="max-w-full max-h-full object-contain hidden"
+                            >
+                            <span id="enhancerNoProcessedText" class="text-gray-400">Processed Image</span>
+                            <div id="enhancerProcessedImageLoader" class="absolute inset-0 bg-white bg-opacity-70 hidden flex items-center justify-center">
+                                <i class="fas fa-spinner fa-spin text-4xl text-purple-600"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <script>
-        const apiKey = 'ovY7FL75c2WT1CWjeGLwsaAR'; // Replace with actual API key
-        let processedImageData = null;
+        const removeBgApiKey = 'vFu5MwAe3CaudgNdZXQuKWf6'; // Background Remover API Key
+        const picsartApiKey = 'eyJraWQiOiI5NzIxYmUzNi1iMjcwLTQ5ZDUtOTc1Ni05ZDU5N2M4NmIwNTEiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhdXRoLXNlcnZpY2UtYTQwZTBkMDQtMmVkNC00NWY1LWIwZjQtN2EzZGUwNDg2OWQ0IiwiYXVkIjoiMzYzMjI0NTE1MDI3MTAxIiwibmJmIjoxNzQwNTI0NDA5LCJzY29wZSI6WyJiMmItYXBpLmdlbl9haSIsImIyYi1hcGkuaW1hZ2VfYXBpIl0sImlzcyI6Imh0dHBzOi8vYXBpLnBpY3NhcnQuY29tL3Rva2VuLXNlcnZpY2UiLCJvd25lcklkIjoiMzYzMjI0NTE1MDI3MTAxIiwiaWF0IjoxNzQwNTI0NDA5LCJqdGkiOiI4OTdmZTNhZi05NjBlLTQ5NTItYWVkYi0yMGNjZmUxYmE2MWEifQ.EmHPRwPCQLrOS6p2IJrAAM_VLW2U_X6cbtfSNvBZpL_ACd2XswHaAxLfMaPvWqmAIMM6WSoeu53eZfcVmrafrq6bx_ubyZSFibeQub3QS29vcCGTHhDJ7mUMhERjEuVLObTHrOhuxRJGnsw2nMKrBsxwv7vSxTJeMK_MC38p24whm57lgKUytn5RorqV_ZNNN2GBgDlfKzkz51LqimUp1oGb51tcbcxeZTrqdEkD10rKAdv8hQIgXVi3W3GBCHxyeXI_8CjEVdFKS5sbb77hufJIGn8nETP5-jkOV-wXNUIehOpx6MbjnHmK0ZcQeLbu6LHXjSJTKZR56k8xGKGdKg'; // Image Enhancer API Key
+        let backgroundProcessedImageData = null;
+        let enhancerProcessedImageData = null;
 
-        function previewImage(event) {
+        // Show the selected tool and hide the other
+        function showTool(toolId) {
+            document.getElementById('background-remover').classList.add('hidden');
+            document.getElementById('image-enhancer').classList.add('hidden');
+            document.getElementById(toolId).classList.remove('hidden');
+        }
+
+        // Preview uploaded image
+        function previewImage(event, tool) {
             const file = event.target.files[0];
-            const originalImage = document.getElementById('originalImage');
-            const noImageText = document.getElementById('noImageText');
-            const originalImageLoader = document.getElementById('originalImageLoader');
+            const originalImage = document.getElementById(`${tool}OriginalImage`);
+            const noImageText = document.getElementById(`${tool}NoImageText`);
+            const originalImageLoader = document.getElementById(`${tool}OriginalImageLoader`);
 
             if (file) {
                 originalImageLoader.classList.remove('hidden');
@@ -173,11 +244,12 @@
             }
         }
 
+        // Remove background using remove.bg API
         async function removeBackground() {
-            const originalImage = document.getElementById('originalImage');
-            const processedImage = document.getElementById('processedImage');
-            const noProcessedText = document.getElementById('noProcessedText');
-            const processedImageLoader = document.getElementById('processedImageLoader');
+            const originalImage = document.getElementById('backgroundOriginalImage');
+            const processedImage = document.getElementById('backgroundProcessedImage');
+            const noProcessedText = document.getElementById('backgroundNoProcessedText');
+            const processedImageLoader = document.getElementById('backgroundProcessedImageLoader');
 
             if (!originalImage.src) {
                 alert('Please upload an image first');
@@ -188,15 +260,15 @@
 
             try {
                 const formData = new FormData();
-                const imageFile = document.getElementById('imageUpload').files[0];
+                const imageFile = document.getElementById('backgroundUpload').files[0];
                 formData.append('image_file', imageFile);
 
                 const response = await fetch('https://api.remove.bg/v1.0/removebg', {
                     method: 'POST',
                     headers: {
-                        'X-Api-Key': apiKey
+                        'X-Api-Key': removeBgApiKey,
                     },
-                    body: formData
+                    body: formData,
                 });
 
                 if (!response.ok) {
@@ -206,13 +278,13 @@
                 const blob = await response.blob();
                 const imageUrl = URL.createObjectURL(blob);
                 processedImage.src = imageUrl;
-                processedImageData = imageUrl;
+                backgroundProcessedImageData = imageUrl;
 
-                processedImage.onload = function() {
+                processedImage.onload = function () {
                     processedImage.classList.remove('hidden');
                     noProcessedText.classList.add('hidden');
                     processedImageLoader.classList.add('hidden');
-                }
+                };
             } catch (error) {
                 console.error('Error removing background:', error);
                 processedImageLoader.classList.add('hidden');
@@ -220,7 +292,59 @@
             }
         }
 
-        function downloadImage() {
+        // Enhance image using Picsart API
+        async function enhanceImage() {
+            const originalImage = document.getElementById('enhancerOriginalImage');
+            const processedImage = document.getElementById('enhancerProcessedImage');
+            const noProcessedText = document.getElementById('enhancerNoProcessedText');
+            const processedImageLoader = document.getElementById('enhancerProcessedImageLoader');
+
+            if (!originalImage.src) {
+                alert('Please upload an image first');
+                return;
+            }
+
+            processedImageLoader.classList.remove('hidden');
+
+            try {
+                const formData = new FormData();
+                const imageFile = document.getElementById('enhancerUpload').files[0];
+                formData.append('image', imageFile);
+                formData.append('upscale_factor', '2');
+                formData.append('format', 'JPG');
+
+                const response = await fetch('https://api.picsart.io/tools/1.0/upscale', {
+                    method: 'POST',
+                    headers: {
+                        'X-Picsart-API-Key': picsartApiKey,
+                    },
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Image enhancement failed');
+                }
+
+                const result = await response.json();
+                const imageUrl = result.data.url; // Enhanced image URL from Picsart
+                processedImage.src = imageUrl;
+                enhancerProcessedImageData = imageUrl;
+
+                processedImage.onload = function () {
+                    processedImage.classList.remove('hidden');
+                    noProcessedText.classList.add('hidden');
+                    processedImageLoader.classList.add('hidden');
+                };
+            } catch (error) {
+                console.error('Error enhancing image:', error);
+                processedImageLoader.classList.add('hidden');
+                alert('Failed to enhance image. Please try again.');
+            }
+        }
+
+        // Download processed image
+        function downloadImage(tool) {
+            const processedImageData = tool === 'background' ? backgroundProcessedImageData : enhancerProcessedImageData;
             if (!processedImageData) {
                 alert('No processed image available');
                 return;
@@ -228,7 +352,7 @@
 
             const link = document.createElement('a');
             link.href = processedImageData;
-            link.download = 'background_removed_image.png';
+            link.download = `${tool}_processed_image.png`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
